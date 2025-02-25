@@ -17,7 +17,7 @@ export const Product=sequelize.define("Product",{
         allowNull: false,
       },
       description:{
-        type:DataTypes.STRING
+        type:DataTypes.TEXT
       },
       image:{
         type:DataTypes.STRING,

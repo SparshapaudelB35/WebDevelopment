@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import { User } from "../../models/index.js";
 
 /**
- *  Fetch all users
+ *  Fetch all users with roles
  */
 const getAll = async (req, res) => {
     try {
@@ -16,11 +16,14 @@ const getAll = async (req, res) => {
     }
 };
 
+/**
+ *  Create a new user with a role
+ */
 const create = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, role } = req.body;
 
-        if (!email || !name || !password) {
+        if (!email || !name || !password || !role) {
             return res.status(400).send({ message: "Invalid payload" });
         }
 
@@ -37,10 +40,11 @@ const create = async (req, res) => {
             name,
             email,
             password: hashedPassword, // Save hashed password
+            role, // Assign role
         });
 
         res.status(201).send({
-            data: { id: newUser.id, name: newUser.name, email: newUser.email },
+            data: { id: newUser.id, name: newUser.name, email: newUser.email, role: newUser.role },
             message: "User successfully created",
         });
     } catch (e) {
@@ -49,10 +53,13 @@ const create = async (req, res) => {
     }
 };
 
+/**
+ *  Update user details including role
+ */
 const update = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, email, password } = req.body;
+        const { name, email, password, role } = req.body;
 
         const user = await User.findOne({ where: { id } });
         if (!user) {
@@ -61,6 +68,7 @@ const update = async (req, res) => {
 
         user.name = name || user.name;
         user.email = email || user.email;
+        user.role = role || user.role;
 
         // Hash the new password if provided
         if (password) {

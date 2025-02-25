@@ -317,7 +317,7 @@
   width: 100%;
 }
 
-.buy-btn {
+.buy-btn,.delete-btn{
   padding: 8px 16px;
   background: red;
   color: #fff;
@@ -529,5 +529,298 @@ h2 {
   color: #777;
   text-align: center;
 }
+
+.viewusers{
+  width: 17%;
+  text-decoration: none;
+  color: red;
+  height: 40px;
+  border-style: solid;
+  border-radius: 6px;
+  border-width: 1px;
+  border-color: red;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  margin-left: 10px;
+
+}
+
+.viewusers:hover{
+  cursor: pointer;
+  background-color: rgba(255, 0, 0, 0.774);
+  transition: 1s;
+  color: white;
+
+}
+
+.back-btn {
+  background-color: red;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.back-btn:hover {
+  background-color: darkred;
+}
+
+.users-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table th, .users-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.edit-btn, .remove-btn, .save-btn {
+  padding: 5px 10px;
+  margin-right: 5px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.edit-btn {
+  background-color: red;
+  color: white;
+}
+
+.remove-btn {
+  background-color: red;
+  color: white;
+}
+
+.save-btn {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.add-user-form {
+  background: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.add-user-form h2 {
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.add-user-form input,
+.add-user-form select {
+  width: 80%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-user-form button,.update-btn {
+  background: #28a745;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-user-form button:hover {
+  background: #218838;
+}
+
+/* Container Styling */
+.add-book-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20px;
+}
+
+
+
+/* Form Container */
+.form-container {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Form Title */
+.form-container h2,.update-book-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Input Fields */
+.form-container label {
+  display: block;
+  font-weight: bold;
+  margin: 10px 0 5px;
+  color: #555;
+}
+
+.form-container input,
+.form-container textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.form-container textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+/* File Input */
+.file-input {
+  margin-top: 10px;
+}
+
+/* Submit Button */
+.submit-button {
+  width: 100%;
+  background-color: #28a745;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  margin-top: 15px;
+}
+
+.submit-button:hover {
+  background-color: #218838;
+}
+/* Update Book Container */
+.update-book-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20px;
+}
+
+/* Form Container */
+.update-book-container form {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Form Title */
+.update-book-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Input Fields */
+.update-book-container label {
+  display: block;
+  font-weight: bold;
+  margin: 10px 0 5px;
+  color: #555;
+}
+
+.update-book-container input,
+.update-book-container textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.update-book-container textarea {
+  resize: vertical;
+  height: 100px;
+}
+
+/* File Input */
+.update-book-container input[type="file"] {
+  margin-top: 10px;
+}
+
+/* Back Button */
+.back-btn {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.back-btn:hover {
+  background-color:darkred;
+}
+
+/* Submit Button */
+.update{
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.update:hover {
+  background-color: #218838;
+}
+
+/* Image Display */
+.update-book-container p {
+  color: #555;
+  margin-top: 10px;
+}
+
+
 
 

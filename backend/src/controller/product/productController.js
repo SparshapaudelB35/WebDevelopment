@@ -1,111 +1,125 @@
-import { Product } from '../../models/index.js'
+import { Product } from "../../models/index.js";
+import multer from "multer";
+import path from "path";
 
+// Configure Multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Store images in 'uploads' folder
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
+  },
+});
+
+const upload = multer({ storage });
 
 /**
- *  fetch all products
+ * Fetch all products
  */
 const getAll = async (req, res) => {
-    try {
-        //fetching all the data from product table
-        const product = await Product.findAll();
-        res.status(200).send({ data: product, message: "successfully fetched data" })
-    } catch (e) {
-        res.status(500).json({ error: 'Failed to fetch product' });
-    }
-}
+  try {
+    const products = await Product.findAll();
+    res.status(200).json({ data: products, message: "Successfully fetched products" });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to fetch products" });
+  }
+};
 
 /** 
- *  add new product
-*/
-
+ * Add a new product with optional image upload
+ */
 const add = async (req, res) => {
+  try {
+    const { name, price, description } = req.body;
+    const image = req.file ? `/uploads/${req.file.filename}` : null; // Store image path
 
-    try {
-        const body = req.body
-        console.log(req.body)
-        //validation
-        if (!body?.price || !body?.name || !body?.description)
-            return res.status(500).send({ message: "Invalid paylod" });
-        const products = await Product.create({
-            name: body.name,
-            price: body.price,
-            description: body.description
-        });
-        res.status(201).send({ data: products, message: "successfully added product" })
-    } catch (e) {
-        console.log(e)
-        res.status(500).json({ error: 'Failed to add product' });
+    // Validation
+    if (!name || !price || !description) {
+      return res.status(400).json({ message: "Invalid payload: name, price, and description are required." });
     }
-}
+
+    const product = await Product.create({ name, price, description, image });
+    res.status(201).json({ data: product, message: "Successfully added product" });
+  } catch (e) {
+    console.error("Error adding product:", e);
+    res.status(500).json({ error: "Failed to add product" });
+  }
+};
 
 /**
- *  update existing product
+ * Update existing product with optional image update
  */
-
 const update = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, price, description } = req.body;
+    const image = req.file ? `/uploads/${req.file.filename}` : null; // New uploaded image
 
-    try {
-        const { id = null } = req.params;
-        const body = req.body;
-        console.log(req.params)
-        //checking if product exist or not
-        const oldProduct = await Product.findOne({ where: { id } })
-        if (!oldProduct) {
-            return res.status(500).send({ message: "Product not found" });
-        }
-        oldProduct.name = body.name;
-        oldProduct.price = body.price || oldProduct.password;
-        oldProduct.description = body.description
-        oldProduct.save();
-        res.status(201).send({ data: oldProduct, message: "Product updated successfully" })
-    } catch (e) {
-        console.log(e)
-        res.status(500).json({ error: 'Failed to update Product' });
+    const product = await Product.findOne({ where: { id } });
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
     }
-}
+
+    // Update fields
+    await product.update({ 
+      name: name || product.name, 
+      price: price || product.price, 
+      description: description || product.description,
+      image: image || product.image // Update image if new one is uploaded
+    });
+
+    res.status(200).json({ data: product, message: "Product updated successfully" });
+  } catch (e) {
+    console.error("Error updating product:", e);
+    res.status(500).json({ error: "Failed to update product" });
+  }
+};
 
 /**
- *  delete product
+ * Delete product by ID
  */
-const delelteById = async (req, res) => {
+const deleteById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findOne({ where: { id } });
 
-    try {
-        const { id = null } = req.params;
-        const oldProduct = await Product.findOne({ where: { id } })
-
-        //checking if Product exist or not
-        if (!oldProduct) {
-            return res.status(500).send({ message: "Product not found" });
-        }
-        oldProduct.destroy();
-        res.status(201).send({ message: "Product deleted successfully" })
-    } catch (e) {
-        res.status(500).json({ error: 'Failed to fetch Product' });
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
     }
-}
+
+    await product.destroy();
+    res.status(200).json({ message: "Product deleted successfully" });
+  } catch (e) {
+    console.error("Error deleting product:", e);
+    res.status(500).json({ error: "Failed to delete product" });
+  }
+};
 
 /**
- *  fetch product by id
+ * Fetch product by ID
  */
 const getById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findOne({ where: { id } });
 
-    try {
-        const { id = null } = req.params;
-        const product = await Product.findOne({ where: { id } })
-        if (!product) {
-            return res.status(500).send({ message: "Product not found" });
-        }
-        res.status(201).send({ message: "Product fetched successfully", data: product })
-    } catch (e) {
-        res.status(500).json({ error: 'Failed to fetch product' });
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
     }
-}
 
+    res.status(200).json({ data: product, message: "Product fetched successfully" });
+  } catch (e) {
+    console.error("Error fetching product:", e);
+    res.status(500).json({ error: "Failed to fetch product" });
+  }
+};
 
 export const productController = {
-    getAll,
-    add,
-    getById,
-    delelteById,
-    update
-}
+  getAll,
+  add,
+  getById,
+  deleteById,
+  update,
+  upload // Export Multer middleware
+};

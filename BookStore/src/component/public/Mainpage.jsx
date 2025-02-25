@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Mainpage() {
   const navigate = useNavigate();
@@ -7,10 +8,9 @@ function Mainpage() {
   const [cart, setCart] = useState([]);
   const [showProfile, setShowProfile] = useState(false);
   const [user, setUser] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(""); 
-  const [filteredProducts, setFilteredProducts] = useState([]); 
-
-  
+  const [searchTerm, setSearchTerm] = useState("");
+  const [products, setProducts] = useState([]); // State to hold fetched products
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("loggedIn") === "true";
@@ -21,28 +21,61 @@ function Mainpage() {
 
     const storedEmail = localStorage.getItem("email");
     const storedUsername = localStorage.getItem("user");
-    console.log(storedUsername)
 
     if (storedEmail && storedUsername) {
       setUser({ email: storedEmail, name: storedUsername });
     }
-    setFilteredProducts(products);
+
+    // Fetch products from backend
+    fetchProducts();
   }, []);
 
   useEffect(() => {
     if (searchTerm.trim() === "") {
-      setFilteredProducts(products); 
+      setFilteredProducts(products);
     } else {
       const results = products.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) 
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredProducts(results);
     }
-  }, [searchTerm]); // Runs every time the search term changes
+  }, [searchTerm, products]);
+
+  const fetchProducts = async () => {
+    try {
+      const token = localStorage.getItem("token"); // Get token from localStorage
+  
+      if (!token) {
+        console.error("No token found, please log in first.");
+        return;
+      }
+  
+      const response = await axios.get("http://localhost:4000/api/product/", {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the token to the request header
+        },
+      });
+  
+      console.log("API response:", response);
+  
+      if (response.data && Array.isArray(response.data.data)) {
+        setProducts(response.data.data);
+        setFilteredProducts(response.data.data);
+      } else {
+        console.error("Failed to fetch products or no data in response");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.error("Unauthorized access. Please log in.");
+      } else {
+        console.error("Error fetching products:", error);
+      }
+    }
+  };
+  
 
   const toggleProfile = () => {
     setShowProfile(!showProfile);
-    console.log("clicked", showProfile)
   };
 
   const gotologin = () => {
@@ -69,43 +102,6 @@ function Mainpage() {
     setShowProfile(false);
     navigate("/");
   };
-  const products = [
-    {
-      id: 1,
-      image: "/assets/atomichabit.jpg",
-      name: "Atomic Habits",
-      description: "A practical guide by James Clear that explores how small, consistent changes can lead to remarkable improvements in life. It provides actionable strategies for building good habits, breaking bad ones, and mastering the tiny behaviors that lead to success.",
-      price: "$19.99",
-    },
-    {
-      id: 2,
-      image: "/assets/the5.jpg",
-      name: "The 5 AM Club",
-      description: "Robin Sharma shares a morning routine designed to maximize productivity, improve focus, and enhance personal development. This book combines storytelling with powerful insights to help readers take control of their mornings.",
-      price: "$18.99",
-    },
-    {
-      id: 3,
-      image: "/assets/rich.jpg",
-      name: "Rich Dad Poor Dad",
-      description: "Robert Kiyosaki explains the differences in mindset between his 'rich dad' and 'poor dad,' offering financial education on how to achieve wealth and financial independence through smart investing.",
-      price: "$15.99",
-    },
-    {
-      id: 4,
-      image: "/assets/thephy.jpg",
-      name: "The Psychology of Money",
-      description: "Morgan Housel explores timeless lessons on wealth, greed, and happiness, explaining how our behaviors and emotions impact financial success more than technical knowledge.",
-      price: "$16.99",
-    },
-    {
-      id: 5,
-      image: "/assets/think.jpg",
-      name: "Think and Grow Rich",
-      description: "A classic by Napoleon Hill that explores the principles of success and wealth accumulation through the power of thoughts, persistence, and desire.",
-      price: "$14.99",
-    },
-  ];
 
   return (
     <>
@@ -131,8 +127,8 @@ function Mainpage() {
               className="search-bar"
               type="text"
               placeholder="Search"
-              value={searchTerm} // Bind the value to the searchTerm state
-              onChange={(e) => setSearchTerm(e.target.value)} // Update searchTerm on change
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
             <button className="search-button">
               <img className="search" src="/assets/search.jpg" alt="Search" />
