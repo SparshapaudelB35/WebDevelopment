@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL,IMAGE_BASE_URL } from "../../constants";
 
 function Adminpage() {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ function Adminpage() {
   const fetchBooks = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:4000/api/product/', {
+      const response = await axios.get(`${API_BASE_URL}/product/`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -64,7 +65,7 @@ function Adminpage() {
   const deleteBook = async (bookId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.delete(`http://localhost:4000/api/product/${bookId}`, {
+      const response = await axios.delete(`${API_BASE_URL}/product/${bookId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -139,7 +140,7 @@ function Adminpage() {
           books.map((book) => (
             <div className="product-card" key={book.id}>
               <div className="product-image">
-                <img src={`http://localhost:4000/uploads/${book.image}`} alt={book.name || 'Book'} />
+                <img src={`${IMAGE_BASE_URL}${book.image}`} alt={book.name || 'Book'} />
               </div>
               <div className="product-info">
                 <h3>{book.name}</h3>

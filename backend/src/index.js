@@ -8,8 +8,8 @@ import path from 'path';
 import dotenv from "dotenv";
 import { authenticateToken } from "./middleware/token-middleware.js";
 import cors from 'cors';
-import { fileURLToPath } from 'url'; // Import fileURLToPath
-import { dirname } from 'path'; // Import dirname
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 dotenv.config();
 
@@ -18,16 +18,17 @@ const __dirname = dirname(__filename);
 
 const app = express();
 app.use(cors());
-
 app.use(bodyParser.json());
 
-app.use("/api/users", userRouter);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 app.use("/api/auth", authRouter);
+app.use("/api/users", userRouter);
+
 app.use(authenticateToken);
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));  
 app.use('/api/product', productRouter);
 
-const port = process.env.PORT;  
+const port = process.env.PORT || 5000;
 
 app.listen(port, function () {
   console.log("Project running on port", port);

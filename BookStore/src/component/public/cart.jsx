@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { IMAGE_BASE_URL } from "../../constants";
 
 function CartPage() {
   const [cart, setCart] = useState([]);
@@ -49,7 +50,7 @@ function CartPage() {
         <div className="cart-items">
           {cart.map((item) => (
             <div key={item.id} className="cart-item">
-              <img src={item.image} alt={item.name} className="cart-item-image" />
+              <img src={`${IMAGE_BASE_URL}${item.image}`} alt={item.name} className="cart-item-image" />
               <div className="cart-item-info">
                 <h3>{item.name}</h3>
                 <p>{item.description}</p>

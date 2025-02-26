@@ -2,8 +2,9 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode"; // Ensure correct import
+import { API_BASE_URL } from "../../constants";
 
-function Login() {
+function Login({onLoginSuccess}) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
@@ -25,7 +26,7 @@ function Login() {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:4000/api/auth/login",
+        `${API_BASE_URL}/auth/login`,
         formData,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -39,6 +40,7 @@ function Login() {
       const token = data.data.token;
       localStorage.setItem("token", token);
       localStorage.setItem("loggedIn", "true");
+      onLoginSuccess(); 
 
       // Decode token
       const decodedToken = jwtDecode(token);

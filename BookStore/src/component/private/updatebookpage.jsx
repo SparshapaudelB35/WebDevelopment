@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios';
+import { API_BASE_URL } from "../../constants";
 
 function UpdateBookPage() {
   const { bookId } = useParams(); // Get book ID from URL
@@ -19,7 +20,7 @@ function UpdateBookPage() {
     const fetchBook = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get(`http://localhost:4000/api/product/${bookId}`, {
+        const response = await axios.get(`${API_BASE_URL}/product/${bookId}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -77,7 +78,7 @@ function UpdateBookPage() {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.put(`http://localhost:4000/api/product/${bookId}`, formData, {
+      const response = await axios.put(`${API_BASE_URL}/product/${bookId}`, formData, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',

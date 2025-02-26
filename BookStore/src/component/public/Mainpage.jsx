@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_BASE_URL, IMAGE_BASE_URL } from "../../constants";
+
 
 function Mainpage() {
   const navigate = useNavigate();
@@ -50,7 +52,7 @@ function Mainpage() {
         return;
       }
   
-      const response = await axios.get("http://localhost:4000/api/product/", {
+      const response = await axios.get(`${API_BASE_URL}/product/`, {
         headers: {
           Authorization: `Bearer ${token}`, // Add the token to the request header
         },
@@ -164,7 +166,7 @@ function Mainpage() {
               filteredProducts.map((product) => (
                 <div key={product.id} className="product-card">
                   <div className="product-image">
-                    <img src={product.image} alt={product.name} />
+                    <img src={`${IMAGE_BASE_URL}${product.image}`} alt={product.name} />
                   </div>
                   <div className="product-info">
                     <h3>{product.name}</h3>
@@ -182,7 +184,7 @@ function Mainpage() {
                 </div>
               ))
             ) : (
-              <p>No products found for your search</p>
+              <p>No Books found for your search</p>
             )}
           </div>
 
