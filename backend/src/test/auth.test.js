@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 
 
 // Mock the JWT utility
-jest.mock('../security/jwt-util.js', () => ({
+jest.mock('../../security/jwt-util.js', () => ({
   generateToken: jest.fn().mockReturnValue('mock-token'),
 }));
 
@@ -22,7 +22,7 @@ describe('POST /api/auth/login', () => {
   });
 
   afterAll(async () => {
-    // Clean up any created users
+    // Clean up any created usersi
     await User.destroy({ where: {} });
   });
 
