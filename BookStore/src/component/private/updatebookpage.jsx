@@ -148,7 +148,7 @@ function UpdateBookPage() {
           />
           {book.image && <p>Current image: {book.image.name}</p>}  {/* Display current image name */}
         </div>
-        <button type="submit" className="update">Update Product</button>
+        <button type="submit" className="update">Update Book</button>
       </form>
     </div>
   );

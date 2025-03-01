@@ -29,8 +29,6 @@ const login = async (req, res) => {
     // Assign role explicitly based on email
     const role = email === "admin@admin.com" ? ROLE.ADMIN : ROLE.USER;
 
-    // Log the role before generating the token to verify
-    console.log("Assigned Role for email:", email, "Role:", role);
 
     // Generate JWT
     const token = generateToken({ user: user.toJSON(), role });
